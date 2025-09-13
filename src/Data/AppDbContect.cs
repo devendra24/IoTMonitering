@@ -8,6 +8,6 @@ namespace IoTMonitoring.Data
         public AppDbContect(DbContextOptions<AppDbContect> options):base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<Device> Devices { get; set; }
-        public DbSet<Telemetry> Telemetrys { get; set; }
+        public DbSet<Telemetry> Telemetries { get; set; }
     }
 }
