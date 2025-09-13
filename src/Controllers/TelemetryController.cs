@@ -1,9 +1,11 @@
 ﻿using System.Security.Claims;
 using IoTMonitoring.Data;
+using IoTMonitoring.Hubs;
 using IoTMonitoring.Models;
 using IoTMonitoring.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace IoTMonitoring.Controllers
@@ -14,10 +16,12 @@ namespace IoTMonitoring.Controllers
     public class TelemetryController : ControllerBase
     {
         private AppDbContect _context;
+        private IHubContext<TelemetryHub> _hub;
 
-        public TelemetryController(AppDbContect contex)
+        public TelemetryController(AppDbContect contex,IHubContext<TelemetryHub> hub)
         {
             _context = contex;
+            _hub = hub;
         }
 
         [HttpPost]
@@ -41,7 +45,15 @@ namespace IoTMonitoring.Controllers
             _context.Telemetries.Add(telemetry);
             await _context.SaveChangesAsync();
 
-            return Ok("Telemetry saved");
+            await _hub.Clients.Group($"device-{deviceId}").SendAsync("ReceiveTelemetry", new
+            {
+                DeviceId = device.Id,
+                telemetry.Temperature,
+                telemetry.Humidity,
+                telemetry.Timestamp
+            });
+
+            return Ok("Telemetry recorded and broadcasted");
         }
 
         [HttpGet]
