@@ -9,5 +9,13 @@ namespace IoTMonitoring.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<Telemetry> Telemetries { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Devices)
+                .WithOne(d => d.User)
+                .HasForeignKey(d => d.UserId);
+        }
     }
 }
