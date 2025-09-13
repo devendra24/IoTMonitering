@@ -16,6 +16,11 @@ namespace IoTMonitoring.Data
                 .HasMany(u => u.Devices)
                 .WithOne(d => d.User)
                 .HasForeignKey(d => d.UserId);
+
+            modelBuilder.Entity<Device>()
+                .HasMany<Telemetry>()
+                .WithOne(t => t.Device)
+                .HasForeignKey(t => t.DeviceId);
         }
     }
 }

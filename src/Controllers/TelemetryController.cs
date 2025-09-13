@@ -1,4 +1,5 @@
-﻿using IoTMonitoring.Data;
+﻿using System.Security.Claims;
+using IoTMonitoring.Data;
 using IoTMonitoring.Models;
 using IoTMonitoring.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IoTMonitoring.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/devices/{deviceId}/[controller]")]
     [ApiController]
     [Authorize]
     public class TelemetryController : ControllerBase
@@ -19,18 +20,20 @@ namespace IoTMonitoring.Controllers
             _context = contex;
         }
 
-        [HttpPost("send")]
-        public async Task<IActionResult> SendTelemetry(TelemetryDto dto)
+        [HttpPost]
+        public async Task<IActionResult> AddTelemetry(int deviceId, TelemetryCreateDto dto)
         {
-            var device = await _context.Devices.FindAsync(dto.DeviceId);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
-            if (device == null)
-                return NotFound("Device not found");
+            var device = await _context.Devices
+                .FirstOrDefaultAsync(d => d.Id == deviceId && d.UserId == userId);
+
+            if (device == null) return NotFound("Device not found or not owned by user");
 
             var telemetry = new Telemetry
             {
-                DeviceId = dto.DeviceId,
-                Tempreture = dto.Temperature,
+                DeviceId = deviceId,
+                Temperature = dto.Temperature,
                 Humidity = dto.Humidity,
                 Timestamp = DateTime.UtcNow,
             };
@@ -41,16 +44,30 @@ namespace IoTMonitoring.Controllers
             return Ok("Telemetry saved");
         }
 
-        [HttpGet("{deviceId}")]
-        public async Task<IActionResult> GetTelemetry(int deviceId)
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<TelemetryReadDto>>> GetTelemetry(int deviceId)
         {
-            var data = await _context.Telemetries
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+            // ensure the device belongs to this user
+            var device = await _context.Devices
+                .FirstOrDefaultAsync(d => d.Id == deviceId && d.UserId == userId);
+
+            if (device == null) return NotFound("Device not found or not owned by user");
+
+            var telemetry = await _context.Telemetries
                 .Where(t => t.DeviceId == deviceId)
                 .OrderByDescending(t => t.Timestamp)
-                .Take(50) // latest 50 readings
+                .Take(20) // last 20 entries
+                .Select(t => new TelemetryReadDto
+                {
+                    Temperature = t.Temperature,
+                    Humidity = t.Humidity,
+                    Timestamp = t.Timestamp
+                })
                 .ToListAsync();
 
-            return Ok(data);
+            return Ok(telemetry);
         }
     }
 }

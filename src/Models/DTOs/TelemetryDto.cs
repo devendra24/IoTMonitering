@@ -1,10 +1,16 @@
 ﻿namespace IoTMonitoring.Models.DTOs
 {
-    public class TelemetryDto
+    public class TelemetryCreateDto
     {
-        public int DeviceId { get; set; }
         public double Temperature { get; set; }
         public double Humidity { get; set; }
+    }
+
+    public class TelemetryReadDto
+    {
+        public double Temperature { get; set; }
+        public double Humidity { get; set; }
+        public DateTime Timestamp { get; set; }
     }
 
 }
