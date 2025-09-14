@@ -1,7 +1,11 @@
 ﻿syntax = "proto3";
 
-option  csharp_namespace = "IoTMonitoring.Grpc";
+option csharp_namespace = "IoTMonitoring.Grpc";
 
+service TelemetryService {
+  // Server streaming (client sends telemetry continuously)
+  rpc StreamTelemetry (stream TelemetryRequest) returns (TelemetryResponse);
+}
 
 message TelemetryRequest {
   int32 deviceId = 1;
@@ -11,9 +15,4 @@ message TelemetryRequest {
 
 message TelemetryResponse {
   string message = 1;
-}
-
-service TelemetryService {
-  // Server streaming (client sends telemetry continuously)
-  rpc StreamTelemetry (stream TelemetryRequest) returns (TelemetryResponse);
 }
