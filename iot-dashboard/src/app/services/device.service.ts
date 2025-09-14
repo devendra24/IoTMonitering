@@ -5,7 +5,7 @@ import { BASE_URL, DEVICE_ROUTE, PORT, PROTOCOL } from '../constants/ServerInfo'
 @Injectable({
   providedIn: 'root'
 })
-export class DeviceServiceService {
+export class DeviceService {
   private baseUrl = BASE_URL+DEVICE_ROUTE;
 
   constructor(private http: HttpClient) { }

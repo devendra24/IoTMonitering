@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AUTH_ROUTE, BASE_URL, PORT, PROTOCOL } from '../constants/ServerInfo';
+import { AUTH_ROUTE, BASE_URL } from '../constants/ServerInfo';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService {
+export class AuthService {
 
   private baseUrl:string = BASE_URL+AUTH_ROUTE;
 
