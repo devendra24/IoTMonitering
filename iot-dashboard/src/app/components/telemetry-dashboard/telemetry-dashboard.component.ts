@@ -2,11 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TelemetryService } from '../../services/telemetry.service';
 import { Subscription } from 'rxjs';
 import { ChartData, ChartOptions } from 'chart.js';
+import {NgChartsModule} from 'ng2-charts';
 
 @Component({
   selector: 'app-telemetry-dashboard',
   standalone: true,
-  imports: [],
+  imports: [NgChartsModule],
   templateUrl: './telemetry-dashboard.component.html',
   styleUrl: './telemetry-dashboard.component.scss'
 })

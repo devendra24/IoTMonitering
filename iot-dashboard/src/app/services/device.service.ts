@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BASE_URL, DEVICE_ROUTE, PORT, PROTOCOL } from '../constants/ServerInfo';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +16,8 @@ export class DeviceService {
     return {headers: new HttpHeaders({Authorization : `Bearer ${token}`})};
   }
 
-  getDevices() {
-    return this.http.get(this.baseUrl, this.getHeaders());
+  getDevices():Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl, this.getHeaders());
   }
 
   createDevice(device: any) {
