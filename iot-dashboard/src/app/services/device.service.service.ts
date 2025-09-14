@@ -1,11 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BASE_URL, DEVICE_ROUTE, PORT, PROTOCOL } from '../constants/ServerInfo';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DeviceServiceService {
-  private baseUrl = 'https://localhost:5001/api/devices';
+  private baseUrl = BASE_URL+DEVICE_ROUTE;
 
   constructor(private http: HttpClient) { }
 
