@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace IoTMonitoring.Migrations
 {
-    [DbContext(typeof(AppDbContect))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20250913183412_Telemetries")]
     partial class Telemetries
     {

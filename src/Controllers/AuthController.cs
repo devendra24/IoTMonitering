@@ -14,10 +14,10 @@ namespace IoTMonitoring.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private AppDbContect _contex;
+        private AppDbContext _contex;
         private IConfiguration _config;
 
-        public AuthController(AppDbContect contex, IConfiguration configuration)
+        public AuthController(AppDbContext contex, IConfiguration configuration)
         {
             _contex = contex;
             _config = configuration;

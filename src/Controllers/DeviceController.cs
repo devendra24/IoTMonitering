@@ -13,9 +13,9 @@ namespace IoTMonitoring.Controllers
     [Authorize]
     public class DeviceController : ControllerBase
     {
-        private AppDbContect _context;
+        private AppDbContext _context;
 
-        public DeviceController(AppDbContect contex)
+        public DeviceController(AppDbContext contex)
         {
             _context = contex;
         }

@@ -15,10 +15,10 @@ namespace IoTMonitoring.Controllers
     [Authorize]
     public class TelemetryController : ControllerBase
     {
-        private AppDbContect _context;
+        private AppDbContext _context;
         private IHubContext<TelemetryHub> _hub;
 
-        public TelemetryController(AppDbContect contex,IHubContext<TelemetryHub> hub)
+        public TelemetryController(AppDbContext contex,IHubContext<TelemetryHub> hub)
         {
             _context = contex;
             _hub = hub;
