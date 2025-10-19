@@ -47,7 +47,7 @@ namespace IoTMonitoring.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DeviceReadDto>>> GetDevices(string userID)
+        public async Task<IActionResult> GetDevices(string userID)
         {
             var user = _context.Users.FirstOrDefault(x => x.UserID == userID);
 
@@ -55,21 +55,20 @@ namespace IoTMonitoring.Controllers
                 .Where(x => x.UserId == user.Id)
                 .ToListAsync();
 
-            return devices.Select(d => new DeviceReadDto
+            return Ok(devices.Select(d => new
             {
-                Id = d.Id,
+                Id = d.DeviceKey,
                 Name = d.Name,
                 Type = d.Type,
-            }).ToList();
+            }).ToList());
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<DeviceReadDto>> GetDevice(int id)
+        [HttpGet("{key}")]
+        public async Task<ActionResult<DeviceReadDto>> GetDevice(string key)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
+            
             var device = await _context.Devices
-                .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.DeviceKey == key);
 
             if (device == null) return NotFound();
 
@@ -81,13 +80,11 @@ namespace IoTMonitoring.Controllers
             };
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateDevice(int id, DeviceUpdateDto dto)
+        [HttpPut("{key}")]
+        public async Task<IActionResult> UpdateDevice(string key, DeviceUpdateDto dto)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
             var device = await _context.Devices
-                .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.DeviceKey == key);
 
             if (device == null) return NotFound();
 
@@ -99,13 +96,11 @@ namespace IoTMonitoring.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDevice(int id)
+        [HttpDelete("{key}")]
+        public async Task<IActionResult> DeleteDevice(string key)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
             var device = await _context.Devices
-                .FirstOrDefaultAsync(d => d.Id == id && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.DeviceKey == key);
 
             if (device == null) return NotFound();
 

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace IoTMonitoring.Controllers
 {
-    [Route("api/devices/{deviceId}/[controller]")]
+    [Route("api/devices/{devicekey}/[controller]")]
     [ApiController]
     public class TelemetryController : ControllerBase
     {
@@ -24,12 +24,10 @@ namespace IoTMonitoring.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTelemetry(string devicekwy, TelemetryCreateDto dto)
+        public async Task<IActionResult> AddTelemetry(string devicekey,TelemetryCreateDto dto)
         {
-            var userId = devicekwy;
-
             var device = await _context.Devices
-                .FirstOrDefaultAsync(d => d.DeviceKey == devicekwy);
+                .FirstOrDefaultAsync(d => d.DeviceKey == devicekey);
 
             if (device == null) return NotFound("Device not found or not owned by user");
 
@@ -44,7 +42,7 @@ namespace IoTMonitoring.Controllers
             _context.Telemetries.Add(telemetry);
             await _context.SaveChangesAsync();
 
-            await _hub.Clients.Group($"device-{devicekwy}").SendAsync("ReceiveTelemetry", new
+            await _hub.Clients.Group($"device-{devicekey}").SendAsync("ReceiveTelemetry", new
             {
                 DeviceId = device.Id,
                 telemetry.Temperature,
@@ -56,12 +54,12 @@ namespace IoTMonitoring.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TelemetryReadDto>>> GetTelemetry(string deviceKey,int page)
+        public async Task<ActionResult<IEnumerable<TelemetryReadDto>>> GetTelemetry(string devicekey,int page)
         {
 
             // ensure the device belongs to this user
             var device = await _context.Devices
-                .FirstOrDefaultAsync(d => d.DeviceKey == deviceKey);
+                .FirstOrDefaultAsync(d => d.DeviceKey == devicekey);
 
             if (device == null) return NotFound("Device not found or not owned by user");
 
