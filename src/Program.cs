@@ -9,7 +9,7 @@ builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(int.Parse(builder.Configuration["Port"]), o =>
     {
-        o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
+        o.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1AndHttp2;
     });
 });
 

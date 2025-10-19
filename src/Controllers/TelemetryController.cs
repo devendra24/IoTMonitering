@@ -3,7 +3,6 @@ using IoTMonitoring.Data;
 using IoTMonitoring.Hubs;
 using IoTMonitoring.Models;
 using IoTMonitoring.Models.DTOs;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +11,11 @@ namespace IoTMonitoring.Controllers
 {
     [Route("api/devices/{deviceId}/[controller]")]
     [ApiController]
-    [Authorize]
     public class TelemetryController : ControllerBase
     {
         private AppDbContext _context;
         private IHubContext<TelemetryHub> _hub;
+        private int maxTelemetry =20;
 
         public TelemetryController(AppDbContext contex,IHubContext<TelemetryHub> hub)
         {
@@ -25,18 +24,18 @@ namespace IoTMonitoring.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddTelemetry(int deviceId, TelemetryCreateDto dto)
+        public async Task<IActionResult> AddTelemetry(string devicekwy, TelemetryCreateDto dto)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var userId = devicekwy;
 
             var device = await _context.Devices
-                .FirstOrDefaultAsync(d => d.Id == deviceId && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.DeviceKey == devicekwy);
 
             if (device == null) return NotFound("Device not found or not owned by user");
 
             var telemetry = new Telemetry
             {
-                DeviceId = deviceId,
+                DeviceId = device.Id,
                 Temperature = dto.Temperature,
                 Humidity = dto.Humidity,
                 Timestamp = DateTime.UtcNow,
@@ -45,7 +44,7 @@ namespace IoTMonitoring.Controllers
             _context.Telemetries.Add(telemetry);
             await _context.SaveChangesAsync();
 
-            await _hub.Clients.Group($"device-{deviceId}").SendAsync("ReceiveTelemetry", new
+            await _hub.Clients.Group($"device-{devicekwy}").SendAsync("ReceiveTelemetry", new
             {
                 DeviceId = device.Id,
                 telemetry.Temperature,
@@ -57,20 +56,20 @@ namespace IoTMonitoring.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TelemetryReadDto>>> GetTelemetry(int deviceId)
+        public async Task<ActionResult<IEnumerable<TelemetryReadDto>>> GetTelemetry(string deviceKey,int page)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
 
             // ensure the device belongs to this user
             var device = await _context.Devices
-                .FirstOrDefaultAsync(d => d.Id == deviceId && d.UserId == userId);
+                .FirstOrDefaultAsync(d => d.DeviceKey == deviceKey);
 
             if (device == null) return NotFound("Device not found or not owned by user");
 
             var telemetry = await _context.Telemetries
-                .Where(t => t.DeviceId == deviceId)
+                .Where(t => t.DeviceId == device.Id)
                 .OrderByDescending(t => t.Timestamp)
-                .Take(20) // last 20 entries
+                .Skip((page-1)*maxTelemetry)
+                .Take(maxTelemetry)
                 .Select(t => new TelemetryReadDto
                 {
                     Temperature = t.Temperature,

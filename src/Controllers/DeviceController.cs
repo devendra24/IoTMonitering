@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using IoTMonitoring.Data;
+using IoTMonitoring.Migrations;
 using IoTMonitoring.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,6 @@ namespace IoTMonitoring.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
     public class DeviceController : ControllerBase
     {
         private AppDbContext _context;
@@ -20,37 +20,39 @@ namespace IoTMonitoring.Controllers
             _context = contex;
         }
 
+        
         [HttpPost]
-        public async Task<ActionResult<DeviceReadDto>> CreateDevice(DeviceCreateDto dto)
+        public async Task<IActionResult> CreateDevice(DeviceCreateDto dto)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-
+            var userId = dto.userID;
+            var user = _context.Users.FirstOrDefault(x=>x.UserID == userId);
+            var key = Guid.NewGuid().ToString();
             var device = new Device
             {
                 Name = dto.Name,
-                DeviceKey = Guid.NewGuid().ToString(),
-                UserId = userId,
+                DeviceKey = key,
+                UserId = user.Id,
                 Type = dto.Type,
             };
 
             _context.Devices.Add(device);
             await _context.SaveChangesAsync();
 
-            return new DeviceReadDto
+            return Ok(new 
             {
-                Id = device.Id,
+                key = key,
                 Name = device.Name,
                 Type = device.Type,
-            };
+            });
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DeviceReadDto>>> GetDevices()
+        public async Task<ActionResult<IEnumerable<DeviceReadDto>>> GetDevices(string userID)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var user = _context.Users.FirstOrDefault(x => x.UserID == userID);
 
             var devices = await _context.Devices
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == user.Id)
                 .ToListAsync();
 
             return devices.Select(d => new DeviceReadDto
