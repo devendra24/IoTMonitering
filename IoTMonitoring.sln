@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36429.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMonitoring", "src\IoTMonitoring.csproj", "{B4012B68-C043-3655-E7EA-3951C0297691}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTMonitoring", "IotMonitering.App\IoTMonitoring.csproj", "{B4012B68-C043-3655-E7EA-3951C0297691}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Beckend", "Beckend", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{85
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mock", "Mock", "{D150AF0C-1AC3-49A8-AD9C-552337C9883E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceMock", "DeviceMock\DeviceMock.csproj", "{9DB61279-5F56-460A-A843-87748BDF5311}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceMock", "IoTMonitering.MockDevices\DeviceMock.csproj", "{9DB61279-5F56-460A-A843-87748BDF5311}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{CDC81208-170F-4BA8-B2F9-1169FB7A7800}"
 EndProject
@@ -21,7 +21,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{C127D7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{A46FEB50-30FE-4BDB-B583-715DECA08B7B}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "IoTMoniteriing.Ui", "IoTMoniteriing.Ui\IoTMoniteriing.Ui.esproj", "{7AA3823A-12DA-FC77-7CB9-D193B4854B6D}"
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "IoTMoniteriing.Ui", "IoTMonitering.Ui\IoTMoniteriing.Ui.esproj", "{C3D11888-3E09-DF72-7601-44CEB7746A0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,12 +37,12 @@ Global
 		{9DB61279-5F56-460A-A843-87748BDF5311}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DB61279-5F56-460A-A843-87748BDF5311}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DB61279-5F56-460A-A843-87748BDF5311}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AA3823A-12DA-FC77-7CB9-D193B4854B6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AA3823A-12DA-FC77-7CB9-D193B4854B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7AA3823A-12DA-FC77-7CB9-D193B4854B6D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{7AA3823A-12DA-FC77-7CB9-D193B4854B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AA3823A-12DA-FC77-7CB9-D193B4854B6D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AA3823A-12DA-FC77-7CB9-D193B4854B6D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C3D11888-3E09-DF72-7601-44CEB7746A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3D11888-3E09-DF72-7601-44CEB7746A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3D11888-3E09-DF72-7601-44CEB7746A0A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C3D11888-3E09-DF72-7601-44CEB7746A0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3D11888-3E09-DF72-7601-44CEB7746A0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3D11888-3E09-DF72-7601-44CEB7746A0A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,7 +54,7 @@ Global
 		{EBC87015-021D-467E-B26A-2A40895CC684} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C127D7B5-AA9A-460C-B1D5-D6030CECC3AE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{A46FEB50-30FE-4BDB-B583-715DECA08B7B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
-		{7AA3823A-12DA-FC77-7CB9-D193B4854B6D} = {85F3C03A-59A5-4CBA-85AF-17EFCD42CFD5}
+		{C3D11888-3E09-DF72-7601-44CEB7746A0A} = {85F3C03A-59A5-4CBA-85AF-17EFCD42CFD5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B3090D0-CC42-482F-829E-DEA0F97BD341}
