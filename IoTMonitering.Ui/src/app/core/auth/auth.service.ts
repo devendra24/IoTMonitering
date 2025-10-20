@@ -16,21 +16,22 @@ export class AuthService {
   }
 
   login():boolean {
-    this.loginService.login().subscribe({
-      next:(token)=>{
-      localStorage.setItem(this.userID, token.id);
-      this.router.navigate(['dashboard']);
-      },
-      error:(err)=>{
-        console.log(err)
-      }
-    })
+    // this.loginService.login().subscribe({
+    //   next:(token)=>{
+    const tokenid = "abc"
+      localStorage.setItem(this.userID, tokenid);
+      this.router.navigate(['/dashboard']);
+    //   },
+    //   error:(err)=>{
+    //     console.log(err)
+    //   }
+    // })
 
     return true;
   }
 
   logout() {
     localStorage.removeItem(this.userID);
-    this.router.navigate(['']);
+    this.router.navigate(['/login']);
   }
 }
